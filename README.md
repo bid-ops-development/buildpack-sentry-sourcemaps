@@ -13,7 +13,7 @@ Define the following configuration variables within Herkou app. See [Heroku Docu
 ## Getting Sentry Auth Token
 
 You can get it on the [API page][]. The token needs the `project:write` scope to be able to upload. The token value would be saved as the `SENTRY_AUTH_TOKEN` configuration variables.
- 
+
 ## Determining your Sentry organziation and project
 
 When viewing your project within Sentry, the organization and project will be found within the URL.
@@ -60,7 +60,7 @@ module.exports = {
 
 Then add this buildpack to your app:
 
-    heroku buildpacks:add https://github.com/WebGrind/buildpack-sentry-sourcemaps
+    heroku buildpacks:add https://github.com/Trungi/buildpack-sentry-sourcemaps
 
 And push a new relase.
 
