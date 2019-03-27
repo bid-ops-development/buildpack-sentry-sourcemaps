@@ -45,7 +45,7 @@ curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
 buildPath="dist/app"
 cd "${build}/${buildPath}"
 
-for map in $(find . | cut -c 3-); do
+for map in $(find . -maxdepth 1 -type f \( -name "*.js" -o -name "*.js.map" \) | cut -c 3-); do
     sum=$(sha1sum "./${map}" | cut -c -40)
     name="~/${map}"
 
