@@ -41,53 +41,64 @@ curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
      -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
      > "$files"
 
+# retrieve dist dirs
+buildPathsStr="${SENTRY_BUILD_PATH:-dist/app}"
+IFS="," read -r -a buildPaths <<< "${buildPathsStr}"
+
 # Upload the sourcemaps
-buildPath="dist/app"
-cd "${build}/${buildPath}"
+#buildPath="dist/app"
 
-for map in $(find . -maxdepth 1 -type f \( -name "*.js" -o -name "*.js.map" \) | cut -c 3-); do
-    sum=$(sha1sum "./${map}" | cut -c -40)
-    name="~/${map}"
+for buildPath in "${buildPaths[@]}";
+do
+    cd "${build}/${buildPath}"
 
-    # Check if we have a '.next' directory for Next.js
-    # Need to modify $name to represent with BUILD_ID from Next.js
-    if [ -d "./.next/" ]; then
-        next_id=$(cat "./.next/BUILD_ID")
-        next_path="~/_next/$next_id/"
-        name="${name/"~/.next/dist/bundles/"/$next_path}"
-    fi
+    for map in $(find . -maxdepth 1 -type f \( -name "*.js" -o -name "*.js.map" \) | cut -c 3-);
+    do
+        sum=$(sha1sum "./${map}" | cut -c -40)
+        name="~/${map}"
 
-    res=($(${JQ} -r ". | map(select(.name == \"${name}\")) | first | .id + \" \" + (.sha1 // \"\")" "${files}"))
+        # Check if we have a '.next' directory for Next.js
+        # Need to modify $name to represent with BUILD_ID from Next.js
+        if [ -d "./.next/" ]; then
+            next_id=$(cat "./.next/BUILD_ID")
+            next_path="~/_next/$next_id/"
+            name="${name/"~/.next/dist/bundles/"/$next_path}"
+        fi
 
-    if [[ "${res[0]}" == "" ]]; then
-        echo "       Uploading ${map} to Sentry"
-        curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
-             -X POST \
-             -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
-             -F file=@"${map}" \
-             -F name="${name}" \
-             >/dev/null
+        res=($(${JQ} -r ". | map(select(.name == \"${name}\")) | first | .id + \" \" + (.sha1 // \"\")" "${files}"))
 
-    elif [[ "${res[1]}" != "${sum}" ]]; then
-        echo "       Updating ${map} on Sentry"
-        curl -sSf "${API}/releases/${SOURCE_VERSION}/files/${res[0]}/" \
-             -X DELETE \
-             -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
-             >/dev/null
-        curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
-             -X POST \
-             -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
-             -F file=@"${map}" \
-             -F name="${name}" \
-             >/dev/null
+        if [[ "${res[0]}" == "" ]]; then
+            echo "       Uploading ${map} to Sentry"
+            curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
+                 -X POST \
+                 -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
+                 -F file=@"${map}" \
+                 -F name="${name}" \
+                 >/dev/null
 
-    else
-        echo "       ${map} is up-to-date"
-    fi
-    if [[ ${map} == *\.map ]]; then
-        echo "Removing sourcemap ${map}"
-        rm "${map}"
-    fi
+        elif [[ "${res[1]}" != "${sum}" ]]; then
+            echo "       Updating ${map} on Sentry"
+            curl -sSf "${API}/releases/${SOURCE_VERSION}/files/${res[0]}/" \
+                 -X DELETE \
+                 -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
+                 >/dev/null
+            curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
+                 -X POST \
+                 -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
+                 -F file=@"${map}" \
+                 -F name="${name}" \
+                 >/dev/null
+
+        else
+            echo "       ${map} is up-to-date"
+        fi
+        if [[ ${map} == *\.map ]]; then
+            echo "Removing sourcemap ${map}"
+            rm "${map}"
+        fi
+    done
+
+    cd -
 done
 
 rm "${files}"
