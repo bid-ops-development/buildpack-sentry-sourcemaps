@@ -44,7 +44,8 @@ curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
 echo "       Parsing build path: ${SENTRY_BUILD_PATH}"
 
 # retrieve dist dirs
-IFS="," read -r -a buildPaths <<< "${SENTRY_BUILD_PATH:-dist/app}"
+# TODO: use dist/app as default
+IFS="," read -r -a buildPaths <<< "${SENTRY_BUILD_PATH:-dist/admin-app,dist/prospect-app}"
 
 # Upload the sourcemaps
 #buildPath="dist/app"
