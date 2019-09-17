@@ -41,10 +41,10 @@ curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
      -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
      > "$files"
 
-echo "       Parsing build path: ${SENTRY_BUILD_PATH}"
+echo "       Parsing build path: ${SENTRY_BUILD_PATH} ...default hardcoded to 'dist/admin-app,dist/prospect-app"
 
 # retrieve dist dirs
-IFS="," read -r -a buildPaths <<< "${SENTRY_BUILD_PATH:-dist/app}"
+IFS="," read -r -a buildPaths <<< "${SENTRY_BUILD_PATH:-dist/admin-app,dist/prospect-app}"
 
 # Upload the sourcemaps
 #buildPath="dist/app"
