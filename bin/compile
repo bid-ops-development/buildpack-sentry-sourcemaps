@@ -66,6 +66,9 @@ do
             next_path="~/_next/$next_id/"
             name="${name/"~/.next/dist/bundles/"/$next_path}"
         fi
+        
+        # We need to send files with folder to sentry e.g. prospect/1.xy.js.map
+        pathWithName="${buildPath}/${name}"
 
         res=($(${JQ} -r ". | map(select(.name == \"${name}\")) | first | .id + \" \" + (.sha1 // \"\")" "${files}"))
 
@@ -75,7 +78,7 @@ do
                  -X POST \
                  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
                  -F file=@"${map}" \
-                 -F name="${name}" \
+                 -F name="${pathWithName}" \
                  >/dev/null
 
         elif [[ "${res[1]}" != "${sum}" ]]; then
@@ -88,7 +91,7 @@ do
                  -X POST \
                  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
                  -F file=@"${map}" \
-                 -F name="${name}" \
+                 -F name="${pathWithName}" \
                  >/dev/null
 
         else
