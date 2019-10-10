@@ -77,7 +77,7 @@ do
             curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
                  -X POST \
                  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
-                 -F file=@"${map}" \
+                 -F file=@"${buildPath}/${map}" \
                  -F name="${pathWithName}" \
                  >/dev/null
 
@@ -90,7 +90,7 @@ do
             curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
                  -X POST \
                  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
-                 -F file=@"${map}" \
+                 -F file=@"${buildPath}/${map}" \
                  -F name="${pathWithName}" \
                  >/dev/null
 
