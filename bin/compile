@@ -68,7 +68,7 @@ do
         fi
         
         # We need to send files with folder to sentry e.g. prospect/1.xy.js.map
-        pathWithName="~/${buildPath}/${map}"
+        pathWithName="~/prospect/${map}"
 
         res=($(${JQ} -r ". | map(select(.name == \"${name}\")) | first | .id + \" \" + (.sha1 // \"\")" "${files}"))
 
