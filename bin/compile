@@ -70,9 +70,8 @@ do
         # HOTFIX
         # Map path to ~/prospect/1.xy.js.map, ~/admin/1.xy.js.map
         # Sentry requires it this way
-        fullPath="${buildpath}/${map}"
-        pathWithoutDist="${fullPath/dist\//''}"
-        nameWithApp="~/${pathWithoutDist/\-app/''}/${map}"
+        pathWithoutDist="${buildpath/dist\//''}"
+        nameWithApp="~/${pathWithoutDist}/${map/\-app/''}"
 
         res=($(${JQ} -r ". | map(select(.name == \"${name}\")) | first | .id + \" \" + (.sha1 // \"\")" "${files}"))
 
