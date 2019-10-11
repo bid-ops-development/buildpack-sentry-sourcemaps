@@ -71,7 +71,7 @@ do
         # Map path to ~/prospect/1.xy.js.map, ~/admin/1.xy.js.map
         # Sentry requires it this way
         pathWithoutDist="${buildpath/dist\//''}"
-        nameWithApp="~/${pathWithoutDist}/${map/\-app/''}"
+        nameWithApp="~/${pathWithoutDist/\-app/''}/${map}"
 
         res=($(${JQ} -r ". | map(select(.name == \"${name}\")) | first | .id + \" \" + (.sha1 // \"\")" "${files}"))
 
