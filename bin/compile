@@ -49,6 +49,8 @@ IFS="," read -r -a buildPaths <<< "${SENTRY_BUILD_PATH:-dist/app}"
 # Upload the sourcemaps
 #buildPath="dist/app"
 
+echo "$(curl --version)"
+
 for buildPath in "${buildPaths[@]}";
 do
     echo "-----> Build path ${buildPath}"
@@ -78,6 +80,7 @@ do
         echo "       Res[0] = ${res[0]}"
         echo "       Res[1] = ${res[1]}"
         echo "       Sum = ${sum}"
+        echo "       Map = ${map}"
 
         if [[ "${res[0]}" == "" ]]; then
             echo "       Uploading ${nameWithApp} to Sentry"
