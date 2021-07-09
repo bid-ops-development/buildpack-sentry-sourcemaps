@@ -75,6 +75,10 @@ do
 
         res=($(${JQ} -r ". | map(select(.name == \"${nameWithApp}\")) | first | .id + \" \" + (.sha1 // \"\")" "${files}"))
 
+        echo "       Res[0] = ${res[0]}"
+        echo "       Res[1] = ${res[1]}"
+        echo "       Sum = ${sum}"
+
         if [[ "${res[0]}" == "" ]]; then
             echo "       Uploading ${nameWithApp} to Sentry"
             curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
