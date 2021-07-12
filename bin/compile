@@ -84,7 +84,8 @@ do
 
         if [[ "${res[0]}" == "" ]]; then
             echo "       Uploading ${nameWithApp} to Sentry"
-            curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
+            curl --http1.1 \
+                 -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
                  -X POST \
                  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
                  -F file=@"${map}" \
@@ -97,7 +98,8 @@ do
                  -X DELETE \
                  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
                  >/dev/null
-            curl -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
+            curl --http1.1 \
+                 -sSf "${API}/releases/${SOURCE_VERSION}/files/" \
                  -X POST \
                  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
                  -F file=@"${map}" \
