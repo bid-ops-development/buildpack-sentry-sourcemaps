@@ -6,9 +6,9 @@ A [Heroku buildpack][] built to upload sourcemaps to [Sentry][], as described in
 
 Define the following configuration variables within Heroku app. See [Heroku Documentation](https://devcenter.heroku.com/articles/config-vars) for more information.
 
-- `SENTRY_AUTH_TOKEN`: the Sentry API authentication token
-- `SENTRY_ORG`: the Sentry organization the project lives under
-- `SENTRY_PROJECT`: the Sentry project the source maps belong too
+- `SENTRY_AUTH_TOKEN`: the Sentry API authentication token (e.g. `0eed0e5bfeb74215252513e2f6d873c08df164579c04ad72123123ddd125125bcdk17`
+- `SENTRY_ORG`: the Sentry organization the project lives under (e.g. `arkestro`)
+- `SENTRY_PROJECT`: the Sentry project the source maps belong too (e.g. `javascript`)
 - `SENTRY_BUILD_PATH`: the directory, relevant to root, where js map files exist (e.g. `./public/packs/js`)
 - `HEROKU_ENV`: Environment for sentry release (e.g. "staging", "production", "sandbox")
 
