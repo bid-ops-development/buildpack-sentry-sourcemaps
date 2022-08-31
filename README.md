@@ -4,7 +4,7 @@ A [Heroku buildpack][] built to upload sourcemaps to [Sentry][], as described in
 
 ## Usage
 
-Define the following configuration variables within Herkou app. See [Heroku Documentaiton](https://devcenter.heroku.com/articles/config-vars) for more informaiton.
+Define the following configuration variables within Heroku app. See [Heroku Documentation](https://devcenter.heroku.com/articles/config-vars) for more information.
 
 - `SENTRY_AUTH_TOKEN`: the Sentry API authentication token
 - `SENTRY_ORG`: the Sentry organization the project lives under
@@ -12,19 +12,24 @@ Define the following configuration variables within Herkou app. See [Heroku Docu
 - `SENTRY_BUILD_PATH`: the directory, relevant to root, where js map files exist (e.g. `./public/packs/js`)
 - `HEROKU_ENV`: Environment for sentry release (e.g. "staging", "production", "sandbox")
 
+After uploading sourcemaps, this will deploy the release which "finalizes" it making it so you can accurately filter by environment in the Sentry UI.
+
 ## Getting Sentry Auth Token
 
 You can get it on the [API page][]. The token needs the `project:write` scope to be able to upload. The token value would be saved as the `SENTRY_AUTH_TOKEN` configuration variables.
 
-## Determining your Sentry organziation and project
+## Determining your Sentry organization and project
 
 When viewing your project within Sentry, the organization and project will be found within the URL.
 
-> `https://sentry.io/<SENTRY_ORG>/<SENTRY_PROJECT>`
+> `https://sentry.io/organizations/<SENTRY_ORG>/projects/<SENTRY_PROJECT>`
 
-## Make sure you BUILD
+## BUILDING (This may not be necessary)
 
 When using webpack, babel, or uglifyJS, you need to build the sourcemaps before they will upload. Typically this can be done within your `package.json` file. Example using babel to create sourcemaps with `-s` option. The `heroku-postbuild` step runs after dependencies are downloaded, allowing you to build during the deploy. Read more about [Heroku specific build steps](https://devcenter.heroku.com/articles/nodejs-support#heroku-specific-build-steps).
+
+**Important Note**
+If your webpack is already producing sourcemaps to packs/js, then none of the following should be necessary.
 
 ### Babel
 
