@@ -30,7 +30,7 @@ curl -sSf "${API}/releases/" \
   -X POST \
   -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
   -H 'Content-Type: application/json' \
-  -d "{\"version\": \"${SOURCE_VERSION}\"}" \
+  -d "{\"version\": \"${SOURCE_VERSION}\", \"environment\": \"${HEROKU_ENV}\"}" \
   >/dev/null
 
 # Retrieve files
