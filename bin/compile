@@ -118,6 +118,18 @@ do
     cd -
 done
 
+# Create a deploy
+echo "-----> Creating Sentry deploy ${SOURCE_VERSION} for organization '${SENTRY_ORG}' in project '${SENTRY_PROJECT}' [${HEROKU_ENV}]"
+
+DEPLOY_API="https://sentry.io/api/0/organizations/${SENTRY_ORG}/releases/${SOURCE_VERSION}/deploys"
+
+curl -sSf "${DEPLOY_API}/" \
+  -X POST \
+  -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
+  -H 'Content-Type: application/json' \
+  -d "{\"environment\": \"${HEROKU_ENV}\"}" \
+  >/dev/null
+
 rm "${files}"
 
 echo "       Done!"
