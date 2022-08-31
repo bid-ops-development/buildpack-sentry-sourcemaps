@@ -24,7 +24,7 @@ fi
 API="https://sentry.io/api/0/projects/${SENTRY_ORG}/${SENTRY_PROJECT}"
 
 # Create a release
-echo "-----> Creating Sentry release ${SOURCE_VERSION} for organization '${SENTRY_ORG}' in project '${SENTRY_PROJECT}'"
+echo "-----> Creating Sentry release ${SOURCE_VERSION} for organization '${SENTRY_ORG}' in project '${SENTRY_PROJECT}' [${HEROKU_ENV}]"
 
 curl -sSf "${API}/releases/" \
   -X POST \
