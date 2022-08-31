@@ -9,6 +9,8 @@ Define the following configuration variables within Herkou app. See [Heroku Docu
 - `SENTRY_AUTH_TOKEN`: the Sentry API authentication token
 - `SENTRY_ORG`: the Sentry organization the project lives under
 - `SENTRY_PROJECT`: the Sentry project the source maps belong too
+- `SENTRY_BUILD_PATH`: the directory, relevant to root, where js map files exist (e.g. `./public/packs/js`)
+- `HEROKU_ENV`: Environment for sentry release (e.g. "staging", "production", "sandbox")
 
 ## Getting Sentry Auth Token
 
